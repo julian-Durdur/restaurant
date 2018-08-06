@@ -185,7 +185,8 @@ const mealRouter = __WEBPACK_IMPORTED_MODULE_0_express___default.a.Router();
 /* harmony export (immutable) */ __webpack_exports__["a"] = mealRouter;
 
 
-mealRouter.route("/").post(__WEBPACK_IMPORTED_MODULE_1__meal_meal_controller__["a" /* default */].create);
+mealRouter.route("/").post(__WEBPACK_IMPORTED_MODULE_1__meal_meal_controller__["a" /* default */].create).get(__WEBPACK_IMPORTED_MODULE_1__meal_meal_controller__["a" /* default */].findAll);
+mealRouter.route("/:id").get(__WEBPACK_IMPORTED_MODULE_1__meal_meal_controller__["a" /* default */].findOne).put(__WEBPACK_IMPORTED_MODULE_1__meal_meal_controller__["a" /* default */].update).delete(__WEBPACK_IMPORTED_MODULE_1__meal_meal_controller__["a" /* default */].delete);
 
 /***/ }),
 /* 9 */
@@ -210,14 +211,77 @@ mealRouter.route("/").post(__WEBPACK_IMPORTED_MODULE_1__meal_meal_controller__["
             if (error && error.details) {
                 return res.status(400).json(error);
             }
-            console.log('salut Julian');
 
-            console.log('req.body my friend : ' + req.body);
-            const meal = await __WEBPACK_IMPORTED_MODULE_1__meal_model__["a" /* default */].create(req.body);
+            const meal = await __WEBPACK_IMPORTED_MODULE_1__meal_model__["a" /* default */].create(value);
             return res.json(meal);
         } catch (err) {
             console.error(err);
             return res.status(500).send(err);
+        }
+    },
+
+    async findAll(req, res) {
+        try {
+            const { page, perPage } = req.query;
+            const options = {
+                page: parseInt(page, 10) || 1,
+                limit: parseInt(perPage, 10) || 10
+            };
+            const meals = await __WEBPACK_IMPORTED_MODULE_1__meal_model__["a" /* default */].find({});
+            res.json(meals);
+        } catch (e) {
+            console.error(e);
+            return res.status(500).send(e);
+        }
+    },
+
+    async findOne(req, res) {
+        try {
+            const { id } = req.params;
+            const meal = await __WEBPACK_IMPORTED_MODULE_1__meal_model__["a" /* default */].findById(id);
+            if (!meal) {
+                return res.status(404).json({ err: 'could not find meal' });
+            }
+            return res.json(meal);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).send(err);
+        }
+    },
+
+    async update(req, res) {
+        try {
+            const { id } = req.params;
+            const schema = __WEBPACK_IMPORTED_MODULE_0_joi___default.a.object().keys({
+                title: __WEBPACK_IMPORTED_MODULE_0_joi___default.a.string().required(),
+                text: __WEBPACK_IMPORTED_MODULE_0_joi___default.a.string().required(),
+                price: __WEBPACK_IMPORTED_MODULE_0_joi___default.a.number().precision(2).min(0).required()
+            });
+            const { value, error } = __WEBPACK_IMPORTED_MODULE_0_joi___default.a.validate(req.body, schema);
+            if (error && error.details) {
+                return res.status(400).json(error);
+            }
+            const meal = await __WEBPACK_IMPORTED_MODULE_1__meal_model__["a" /* default */].findOneAndUpdate({ _id: id }, value, { new: true });
+            if (!meal) {
+                return res.status(404).json({ err: 'could not find meal' });
+            }
+            return res.json(meal);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).send(err);
+        }
+    },
+    async delete(req, res) {
+        try {
+            const { id } = req.params;
+            const meal = await __WEBPACK_IMPORTED_MODULE_1__meal_model__["a" /* default */].findOneAndRemove({ _id: id });
+            if (!meal) {
+                return res.status(404).json({ err: 'could not found meal' });
+            }
+            res.json(meal);
+        } catch (e) {
+            console.error(e);
+            return res.status(500).send(e);
         }
     }
 });
