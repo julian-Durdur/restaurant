@@ -1,0 +1,1 @@
+export { mealRouter } from './meal.router'
