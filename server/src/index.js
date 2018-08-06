@@ -2,13 +2,14 @@ import express from 'express'
 import { connect } from './config/DB'
 import volleyball from 'volleyball'
 import { restRouter } from './api/index';
+import cors from 'cors'
 
 const { PORT } = process.env
 const app = express();
 
 connect();
+app.use(cors())
 app.use(volleyball)
-
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }));
 

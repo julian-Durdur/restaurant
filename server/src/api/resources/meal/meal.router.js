@@ -1,5 +1,5 @@
 import express from 'express'
-import mealController from '../meal/meal.controller'
+import mealController from './meal.controller'
 
 export const mealRouter = express.Router()
 

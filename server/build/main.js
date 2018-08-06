@@ -96,6 +96,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_volleyball__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_volleyball___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_volleyball__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__api_index__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_cors__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_cors___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_cors__);
+
 
 
 
@@ -105,8 +108,8 @@ const { PORT } = process.env;
 const app = __WEBPACK_IMPORTED_MODULE_0_express___default()();
 
 Object(__WEBPACK_IMPORTED_MODULE_1__config_DB__["a" /* connect */])();
+app.use(__WEBPACK_IMPORTED_MODULE_4_cors___default()());
 app.use(__WEBPACK_IMPORTED_MODULE_2_volleyball___default.a);
-
 app.use(__WEBPACK_IMPORTED_MODULE_0_express___default.a.json());
 app.use(__WEBPACK_IMPORTED_MODULE_0_express___default.a.urlencoded({ extended: true }));
 
@@ -161,6 +164,8 @@ module.exports = require("volleyball");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_express__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_express___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_express__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__resources_meal_meal_router__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__resources_user_user_router__ = __webpack_require__(13);
+
 
 
 
@@ -169,6 +174,7 @@ const restRouter = __WEBPACK_IMPORTED_MODULE_0_express___default.a.Router();
 
 
 restRouter.use('/meals', __WEBPACK_IMPORTED_MODULE_1__resources_meal_meal_router__["a" /* mealRouter */]);
+restRouter.use('/users', __WEBPACK_IMPORTED_MODULE_2__resources_user_user_router__["a" /* userRouter */]);
 
 /***/ }),
 /* 8 */
@@ -177,7 +183,7 @@ restRouter.use('/meals', __WEBPACK_IMPORTED_MODULE_1__resources_meal_meal_router
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_express__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_express___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_express__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__meal_meal_controller__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__meal_controller__ = __webpack_require__(9);
 
 
 
@@ -185,8 +191,8 @@ const mealRouter = __WEBPACK_IMPORTED_MODULE_0_express___default.a.Router();
 /* harmony export (immutable) */ __webpack_exports__["a"] = mealRouter;
 
 
-mealRouter.route("/").post(__WEBPACK_IMPORTED_MODULE_1__meal_meal_controller__["a" /* default */].create).get(__WEBPACK_IMPORTED_MODULE_1__meal_meal_controller__["a" /* default */].findAll);
-mealRouter.route("/:id").get(__WEBPACK_IMPORTED_MODULE_1__meal_meal_controller__["a" /* default */].findOne).put(__WEBPACK_IMPORTED_MODULE_1__meal_meal_controller__["a" /* default */].update).delete(__WEBPACK_IMPORTED_MODULE_1__meal_meal_controller__["a" /* default */].delete);
+mealRouter.route("/").post(__WEBPACK_IMPORTED_MODULE_1__meal_controller__["a" /* default */].create).get(__WEBPACK_IMPORTED_MODULE_1__meal_controller__["a" /* default */].findAll);
+mealRouter.route("/:id").get(__WEBPACK_IMPORTED_MODULE_1__meal_controller__["a" /* default */].findOne).put(__WEBPACK_IMPORTED_MODULE_1__meal_controller__["a" /* default */].update).delete(__WEBPACK_IMPORTED_MODULE_1__meal_controller__["a" /* default */].delete);
 
 /***/ }),
 /* 9 */
@@ -322,6 +328,159 @@ const mealSchema = new Schema({
 //mealSchema.plugin(mongoosePaginate)
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.model('Meal', mealSchema));
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports = require("cors");
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_express__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_express___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_express__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user_controller__ = __webpack_require__(14);
+
+
+
+const userRouter = __WEBPACK_IMPORTED_MODULE_0_express___default.a.Router();
+/* harmony export (immutable) */ __webpack_exports__["a"] = userRouter;
+
+
+userRouter.route("/").post(__WEBPACK_IMPORTED_MODULE_1__user_controller__["a" /* default */].create).get(__WEBPACK_IMPORTED_MODULE_1__user_controller__["a" /* default */].findAll);
+userRouter.route("/:id").get(__WEBPACK_IMPORTED_MODULE_1__user_controller__["a" /* default */].findOne).put(__WEBPACK_IMPORTED_MODULE_1__user_controller__["a" /* default */].update).delete(__WEBPACK_IMPORTED_MODULE_1__user_controller__["a" /* default */].delete);
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_joi__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_joi___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_joi__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user_model__ = __webpack_require__(15);
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    async create(req, res) {
+        try {
+            const schema = __WEBPACK_IMPORTED_MODULE_0_joi___default.a.object().keys({
+                name: __WEBPACK_IMPORTED_MODULE_0_joi___default.a.string().required(),
+                address: __WEBPACK_IMPORTED_MODULE_0_joi___default.a.string().required(),
+                email: __WEBPACK_IMPORTED_MODULE_0_joi___default.a.string().required(),
+                phoneNumber: __WEBPACK_IMPORTED_MODULE_0_joi___default.a.string().required()
+            });
+            const { value, error } = __WEBPACK_IMPORTED_MODULE_0_joi___default.a.validate(req.body, schema);
+            if (error && error.details) {
+                return res.status(400).json(error);
+            }
+
+            const user = await __WEBPACK_IMPORTED_MODULE_1__user_model__["a" /* default */].create(value);
+            return res.json(user);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).send(err);
+        }
+    },
+
+    async findAll(req, res) {
+        try {
+            const users = await __WEBPACK_IMPORTED_MODULE_1__user_model__["a" /* default */].find({});
+            res.json(users);
+        } catch (e) {
+            console.error(e);
+            return res.status(500).send(e);
+        }
+    },
+
+    async findOne(req, res) {
+        try {
+            const { id } = req.params;
+            const user = await __WEBPACK_IMPORTED_MODULE_1__user_model__["a" /* default */].findById(id);
+            if (!user) {
+                return res.status(404).json({ err: 'could not find user' });
+            }
+            return res.json(user);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).send(err);
+        }
+    },
+
+    async update(req, res) {
+        try {
+            const { id } = req.params;
+            const schema = __WEBPACK_IMPORTED_MODULE_0_joi___default.a.object().keys({
+                title: __WEBPACK_IMPORTED_MODULE_0_joi___default.a.string().required(),
+                text: __WEBPACK_IMPORTED_MODULE_0_joi___default.a.string().required(),
+                price: __WEBPACK_IMPORTED_MODULE_0_joi___default.a.number().precision(2).min(0).required()
+            });
+            const { value, error } = __WEBPACK_IMPORTED_MODULE_0_joi___default.a.validate(req.body, schema);
+            if (error && error.details) {
+                return res.status(400).json(error);
+            }
+            const user = await __WEBPACK_IMPORTED_MODULE_1__user_model__["a" /* default */].findOneAndUpdate({ _id: id }, value, { new: true });
+            if (!user) {
+                return res.status(404).json({ err: 'could not find user' });
+            }
+            return res.json(user);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).send(err);
+        }
+    },
+    async delete(req, res) {
+        try {
+            const { id } = req.params;
+            const user = await __WEBPACK_IMPORTED_MODULE_1__user_model__["a" /* default */].findOneAndRemove({ _id: id });
+            if (!user) {
+                return res.status(404).json({ err: 'could not found user' });
+            }
+            res.json(user);
+        } catch (e) {
+            console.error(e);
+            return res.status(500).send(e);
+        }
+    }
+});
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongoose___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mongoose__);
+
+//import mongoosePaginate from 'mongoose-paginate'
+
+const { Schema } = __WEBPACK_IMPORTED_MODULE_0_mongoose___default.a;
+const userSchema = new Schema({
+	name: {
+		type: String,
+		required: [true, "user must have name"]
+	},
+	address: {
+		type: String,
+		required: [true, "user must have address"]
+	},
+	email: {
+		type: String,
+		required: [true, "user must have email"]
+	},
+
+	phoneNumber: {
+		type: String,
+		required: [true, "user must have phoneNumber"]
+	}
+});
+
+//userSchema.plugin(mongoosePaginate)
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_mongoose___default.a.model('User', userSchema));
 
 /***/ })
 /******/ ]);
