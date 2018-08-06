@@ -18,7 +18,8 @@ export default {
             }
             console.log('salut Julian');
             
-            const meal = await Meal.create(value);
+						console.log('req.body my friend : '+req.body)
+            const meal = await Meal.create(req.body);
             return res.json(meal);
         }catch(err) {
             console.error(err);

@@ -8,6 +8,11 @@ const app = express();
 
 connect();
 app.use(volleyball)
+
+app.use(express.json());
+app.use(express.urlencoded({ extended:true }));
+
+
 app.use('/api', restRouter)
 
 app.get('/', (req, res) => {
