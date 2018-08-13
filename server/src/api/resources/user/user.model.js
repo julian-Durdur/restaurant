@@ -3,6 +3,14 @@ import mongoose from "mongoose"
 
 const { Schema } = mongoose
 const userSchema = new Schema({
+	username: {
+		type: String,
+		required: [true, "user must have a username"],
+	},
+	password: {
+		type:String,
+		required:[true, "user must have a password"],
+	},
 	name:{
 		type:String,
 		required:[true, "user must have name"],
@@ -10,15 +18,17 @@ const userSchema = new Schema({
 	address:{
 		type:String,
 		required:[true, "user must have address"],
-    },
-    email:{
+  },
+  email:{
 		type:String,
 		required:[true, "user must have email"],
 	},
-    
-	phoneNumber:{
+	phonenumber:{
 		type:String,
-        required:[true, "user must have phoneNumber"],
+    required:[true, "user must have a phone number"],
+	},
+	notes : {
+		type : String
 	}
 })
 
