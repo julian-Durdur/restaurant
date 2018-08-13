@@ -3,20 +3,18 @@ import mongoose from "mongoose"
 
 const { Schema } = mongoose
 const orderSchema = new Schema({
-	user:{
+	user : {
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
     },
-    cart :
+  cart :
     [
         {
             qty : { type : Number},
             meal : { type: mongoose.Schema.Types.ObjectId, ref: 'Meal'}
         }
     ],
-	note:{
-		type:Number,
-		default:0,
-		min:0,
+	deliveryDate : {
+		type:Date,
 	}
 })
 

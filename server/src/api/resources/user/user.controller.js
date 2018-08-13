@@ -5,10 +5,13 @@ export default {
     async create (req, res){
         try{
             const schema = Joi.object().keys({
+                username: Joi.string().required(),
+                password: Joi.string().required(),
                 name: Joi.string().required(),
                 address: Joi.string().required(),
                 email: Joi.string().required(),
-                phoneNumber: Joi.string().required(),
+                phonenumber: Joi.string().required(),
+                notes: Joi.string().optional(),
             });
             const { value, error } = Joi.validate(req.body, schema);
             if (error && error.details) {
@@ -50,13 +53,15 @@ export default {
     async update (req, res){
         try{
             const { id } = req.params;
+						
             const schema = Joi.object().keys({
-                title: Joi.string().required(),
-                text: Joi.string().required(),
-                price: Joi.number()
-                .precision(2)
-                .min(0)
-                .required(),
+								username: Joi.string().required(),
+                password: Joi.string().required(),
+                name: Joi.string().required(),
+                address: Joi.string().required(),
+                email: Joi.string().required(),
+                phonenumber: Joi.string().required(),
+                notes: Joi.string().optional(),
             });
             const { value, error } = Joi.validate(req.body, schema);
             if (error && error.details) {
